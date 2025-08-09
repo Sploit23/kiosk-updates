@@ -8,7 +8,6 @@ class ChristmasTheme {
     init() {
         this.injectMarkup();
         this.initWelcomeScreen();
-        this.createSnowflakes();
         this.addEventListeners();
     }
 
@@ -42,23 +41,7 @@ class ChristmasTheme {
         }
     }
 
-    createSnowflakes() {
-        const container = document.body;
-        const numSnowflakes = 30;
-        const snowflakes = ['❄️', '❅', '❆', '🎄', '🎁', '⭐'];
-
-        for (let i = 0; i < numSnowflakes; i++) {
-            const snowflake = document.createElement('div');
-            snowflake.innerHTML = snowflakes[Math.floor(Math.random() * snowflakes.length)];
-            snowflake.classList.add('snowflake');
-            snowflake.style.left = `${Math.random() * 100}vw`;
-            snowflake.style.animationDuration = `${Math.random() * 10 + 5}s`;
-            snowflake.style.animationDelay = `${Math.random() * 5}s`;
-            snowflake.style.opacity = Math.random();
-            snowflake.style.fontSize = `${Math.random() * 1 + 0.5}em`;
-            container.appendChild(snowflake);
-        }
-    }
+    // Função createSnowflakes removida para melhor visualização das imagens
 
     addEventListeners() {
         // Exemplo: Pode ouvir eventos do app.js para animações específicas, se necessário.

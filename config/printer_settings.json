@@ -1,0 +1,14 @@
+{
+    "printer_name": "default",
+    "paper_size": "A4",
+    "orientation": "portrait",
+    "quality": "high",
+    "margins": {
+        "top": 10,
+        "bottom": 10,
+        "left": 10,
+        "right": 10
+    },
+    "scale": "fit_to_page",
+    "color_mode": "color"
+}

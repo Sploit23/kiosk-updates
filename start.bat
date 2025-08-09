@@ -27,7 +27,15 @@ echo Iniciando o servidor...
 echo.
 echo Pressione Ctrl+C para encerrar o servidor.
 echo.
-python server.py
+start /B python server.py
+
+:: Aguarda o servidor iniciar
+echo Aguardando o servidor iniciar...
+timeout /t 3 /nobreak > nul
+
+:: Inicia o Chrome em modo quiosque
+echo Iniciando o Chrome em modo quiosque...
+start chrome --kiosk http://localhost:5000
 
 :: Desativa o ambiente virtual ao sair
 call venv\Scripts\deactivate.bat

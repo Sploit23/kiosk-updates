@@ -69,16 +69,42 @@ function mostrarNotificacaoAtualizacao(updateInfo) {
 
 // Carrega lista de imagens do servidor
 async function carregarImagens() {
-    const resp = await fetch("/api/images");
-    if (!resp.ok) {
-        document.getElementById("main").innerHTML = `<h2 class="loading">Erro ao carregar fotos.</h2>`;
-        console.error("Erro ao carregar fotos:", await resp.json());
-        return;
-    }
-    grupos = await resp.json();
+    try {
+        const resp = await fetch("/api/images");
+        if (!resp.ok) {
+            const erro = await resp.json();
+            console.error("Erro ao carregar fotos:", erro);
+            
+            let mensagemErro = `<h2 class="loading">Erro ao carregar fotos</h2>`;
+            mensagemErro += `<p class="error-message">${erro.erro || 'Erro desconhecido'}</p>`;
+            
+            if (erro.solucao) {
+                mensagemErro += `<p class="solution-message">${erro.solucao}</p>`;
+            }
+            
+            mensagemErro += `<button class="config-button" onclick="window.location.href='/config'">Ir para Configurações</button>`;
+            
+            document.getElementById("main").innerHTML = mensagemErro;
+            return;
+        }
+        
+        grupos = await resp.json();
 
-    if (Object.keys(grupos).length === 0) {
-        document.getElementById("main").innerHTML = `<h2 class="loading">Nenhuma foto encontrada para hoje.</h2>`;
+        if (Object.keys(grupos).length === 0) {
+            let mensagem = `<h2 class="loading">Nenhuma foto encontrada para hoje</h2>`;
+            mensagem += `<p class="info-message">Verifique se as fotos foram copiadas para a pasta correta.</p>`;
+            mensagem += `<button class="config-button" onclick="window.location.href='/config'">Ir para Configurações</button>`;
+            
+            document.getElementById("main").innerHTML = mensagem;
+            return;
+        }
+    } catch (error) {
+        console.error("Erro ao processar requisição:", error);
+        document.getElementById("main").innerHTML = `
+            <h2 class="loading">Erro ao conectar com o servidor</h2>
+            <p class="error-message">Verifique se o servidor está em execução.</p>
+            <button class="config-button" onclick="window.location.href='/config'">Ir para Configurações</button>
+        `;
         return;
     }
 
@@ -129,14 +155,14 @@ function mostrarFotoGrande(nome) {
     img.id = "foto-grande-img";
     img.src = "/imagens/" + nome;
 
-    // Importa o módulo de impressão
-    import('./printer.js')
-        .then(module => {
-            window.printerService = module.printer;
-        })
-        .catch(error => {
-            console.error("Erro ao carregar módulo de impressão:", error);
-        });
+    // Carrega o serviço de impressão
+    if (typeof PrinterService !== 'undefined') {
+        if (!window.printerService) {
+            window.printerService = new PrinterService();
+        }
+    } else {
+        console.warn("Serviço de impressão não disponível");
+    }
     
     const btn = document.createElement("button");
     btn.id = "botao-imprimir";
@@ -195,19 +221,7 @@ function mostrarMiniaturas() {
     });
 }
 
-const snowflakes = ['❄️', '❅', '❆', '🎄', '🎁', '⭐'];
-function createSnowflake() {
-    const snowflake = document.createElement('div');
-    snowflake.innerHTML = snowflakes[Math.floor(Math.random() * snowflakes.length)];
-    snowflake.className = 'snowflake';
-    snowflake.style.left = `${Math.random() * 100}vw`;
-    snowflake.style.animationDuration = `${Math.random() * 10 + 5}s`;
-    snowflake.style.animationDelay = `${Math.random() * 5}s`;
-    snowflake.style.opacity = Math.random();
-    snowflake.style.fontSize = `${Math.random() * 1 + 0.5}em`;
-    document.body.appendChild(snowflake);
-}
-setInterval(createSnowflake, 500);
+// Animações de flocos de neve removidas para melhor visualização das imagens
 
 // Adiciona informações de versão ao rodapé
 function adicionarInfoVersao() {

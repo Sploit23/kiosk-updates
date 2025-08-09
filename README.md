@@ -1,14 +1,87 @@
-# 📸 Quiosque Profissional de Fotos
+# Sistema de Visualização de Fotos com Impressão
 
-## Visão Geral
-Este projeto é um quiosque digital para seleção e impressão de fotos, desenvolvido com tecnologias web (HTML, CSS, JavaScript) e um servidor Python (Flask). O sistema permite que usuários visualizem, selecionem e imprimam fotos em diferentes formatos.
+Sistema web para visualização e impressão de fotos organizadas por data, com interface em modo quiosque.
 
-## Funcionalidades Atuais
-- Interface responsiva com tema de Natal
-- Visualização de fotos em diferentes formatos (10x15, 15x20, Bolas)
-- Agrupamento automático de fotos por ID
-- Impressão básica via diálogo do navegador
-- Suporte a múltiplos temas visuais
+## Estrutura do Projeto
+
+```
+├── config/                     # Arquivos de configuração
+│   ├── settings.json          # Configurações principais
+│   ├── themes.json            # Configurações de temas
+│   ├── version.json           # Informações de versão
+│   └── printer_settings.json  # Configurações da impressora
+├── modules/                    # Módulos organizados
+│   ├── printer/               # Módulo de impressão
+│   │   ├── __init__.py
+│   │   └── printer_config.py  # Configurações da impressora
+│   └── updater/               # Módulo de atualizações
+│       ├── __init__.py
+│       └── update_manager.py  # Gerenciador de atualizações
+├── static/                     # Arquivos estáticos
+│   ├── css/                   # Folhas de estilo
+│   │   └── core.css
+│   ├── js/                    # Scripts JavaScript
+│   │   ├── app.js             # Script principal
+│   │   └── printer.js         # Script de impressão
+│   └── assets/                # Recursos adicionais
+│       └── themes/            # Temas da aplicação
+│           └── christmas/
+│               └── theme.js
+├── templates/                  # Templates HTML
+│   ├── index.html             # Página principal
+│   └── config.html            # Página de configuração
+├── server.py                   # Servidor Flask principal
+├── start.bat                   # Script de inicialização
+└── README.md                   # Documentação
+```
+
+## Funcionalidades
+
+- **Visualização de Fotos**: Interface para navegar pelas fotos organizadas por data
+- **Impressão**: Sistema de impressão integrado com configurações personalizáveis
+- **Configuração**: Interface web para configurar pasta de imagens e impressora
+- **Modo Quiosque**: Inicialização automática em tela cheia
+- **Temas**: Sistema de temas personalizáveis
+- **Atualizações**: Sistema de verificação e aplicação de atualizações
+
+## Como Usar
+
+1. Execute `start.bat` para iniciar o servidor e abrir o navegador
+2. Configure a pasta de imagens através do botão de configuração (⚙️)
+3. Navegue pelas fotos usando os controles da interface
+4. Use os botões de impressão para imprimir as fotos selecionadas
+
+## Configuração
+
+### Pasta de Imagens
+- Acesse a página de configuração através do ícone de engrenagem
+- Selecione a pasta base onde estão organizadas as fotos por data
+- As fotos devem estar organizadas em pastas com formato AAAAMMDD
+
+### Impressora
+- As configurações da impressora são gerenciadas pelo módulo `modules/printer/`
+- Configurações são salvas em `config/printer_settings.json`
+
+## Desenvolvimento
+
+### Estrutura Modular
+- **modules/printer/**: Gerencia todas as configurações e operações de impressão
+- **modules/updater/**: Gerencia verificação e aplicação de atualizações
+- **config/**: Centraliza todos os arquivos de configuração
+- **static/**: Organiza recursos estáticos em subpastas específicas
+
+### Tecnologias Utilizadas
+- **Backend**: Python Flask
+- **Frontend**: HTML5, CSS3, JavaScript
+- **Configuração**: JSON
+- **Impressão**: JavaScript Print API
+
+## Requisitos
+
+- Python 3.7+
+- Flask
+- Requests (para verificação de atualizações)
+- Navegador web moderno
 
 ## Roadmap para Versão Comercial
 

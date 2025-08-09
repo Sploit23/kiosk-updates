@@ -54,9 +54,8 @@ def build_executable(version):
         ("templates", "templates"),
         ("static", "static"),
         ("modules", "modules"),
-        ("version.json", "."),
-        ("settings.json", "."),
-        ("themes.json", ".")
+        ("config", "config"),
+        ("requirements.txt", ".")
     ]
     
     # Constrói a string de dados para PyInstaller

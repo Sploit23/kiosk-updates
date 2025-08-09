@@ -34,41 +34,23 @@ body {
     background-attachment: fixed;
     color: var(--snow-white);
     height: 100vh;
+    min-height: 100vh;
     display: grid;
     grid-template-columns: 320px 1fr;
     overflow: hidden;
     position: relative;
 }
 
-/* Flocos de neve animados com CSS */
-.snowflake {
-    position: fixed;
-    top: -10px;
-    color: var(--snow-white);
-    font-size: 1em;
-    animation: fall linear infinite;
-    z-index: 1;
-    pointer-events: none;
-    opacity: 0.8;
-}
-
-@keyframes fall {
-    to { transform: translateY(100vh) rotate(360deg); }
-}
+/* Estilos de flocos de neve removidos para melhor visualização das imagens */
 
 /* Sidebar */
 #sidebar {
-    background: 
-        linear-gradient(135deg, var(--christmas-red) 0%, var(--dark-red) 100%),
-        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><polygon points="50,10 60,40 90,40 70,60 80,90 50,70 20,90 30,60 10,40 40,40" fill="gold" opacity="0.1"/></svg>');
+    background: linear-gradient(135deg, var(--christmas-red) 0%, var(--dark-red) 100%);
     overflow-y: auto;
     padding: 1.5rem;
     border-right: 3px solid var(--christmas-gold);
     box-shadow: 5px 0 20px rgba(0, 0, 0, 0.3);
     position: relative;
-    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 15 L55 35 L75 35 L60 50 L65 70 L50 60 L35 70 L40 50 L25 35 L45 35 Z" fill="gold" opacity="0.05"/></svg>') repeat;
-    background-size: 50px 50px;
-    /* REMOVIDO: pointer-events: none; - para permitir cliques */
 }
 .sidebar-header {
     text-align: center;
@@ -78,6 +60,30 @@ body {
     background: rgba(255, 215, 0, 0.1);
     border-radius: 15px;
     position: relative;
+}
+
+#config-button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.7);
+    border: 2px solid var(--christmas-gold);
+    color: var(--christmas-gold);
+    font-size: 24px;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+#config-button:hover {
+    transform: rotate(45deg);
+    background-color: rgba(255, 215, 0, 0.2);
 }
 .sidebar-header h2 {
     font-family: 'Mountains of Christmas', cursive;
@@ -134,17 +140,20 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     padding: 20px;
     background: rgba(255, 255, 255, 0.05);
+    height: 100vh;
+    overflow-y: auto;
 }
 #foto-grande {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     width: 100%;
-    height: 80%;
+    flex: 1;
+    min-height: 0;
 }
 #foto-grande h2 {
     font-family: 'Mountains of Christmas', cursive;
@@ -154,7 +163,7 @@ body {
 }
 #foto-grande-img {
     max-width: 90%;
-    max-height: 80vh;
+    max-height: calc(100vh - 280px);
     object-fit: contain;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
@@ -164,6 +173,9 @@ body {
     display: flex;
     gap: 10px;
     margin-top: 20px;
+    flex-shrink: 0;
+    justify-content: center;
+    padding: 10px 0;
 }
 .miniatura {
     text-align: center;
@@ -219,6 +231,45 @@ body {
     font-size: 24px;
     color: var(--snow-white);
     font-family: 'Mountains of Christmas', cursive;
+}
+
+.error-message {
+    text-align: center;
+    margin: 20px auto;
+    color: var(--light-red);
+    font-size: 18px;
+    max-width: 80%;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.solution-message, .info-message {
+    text-align: center;
+    margin: 20px auto;
+    color: var(--christmas-gold);
+    font-size: 16px;
+    max-width: 80%;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.config-button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: var(--christmas-green);
+    color: var(--snow-white);
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.config-button:hover {
+    background-color: var(--dark-green);
 }
 
 /* Estilos para notificação de atualização */
@@ -297,4 +348,62 @@ body {
 
 #app-version:hover {
     opacity: 1;
+}
+
+/* Media queries para responsividade em tela cheia */
+@media screen and (max-height: 600px) {
+    #foto-grande-img {
+        max-height: calc(100vh - 200px);
+    }
+    
+    .miniatura img {
+        width: 80px;
+        height: 80px;
+    }
+    
+    #miniaturas {
+        gap: 8px;
+        margin-top: 15px;
+    }
+}
+
+@media screen and (min-height: 900px) {
+    #foto-grande-img {
+        max-height: calc(100vh - 320px);
+    }
+}
+
+/* Ajustes para modo fullscreen */
+@media screen and (min-width: 1200px) {
+    body {
+        grid-template-columns: 350px 1fr;
+    }
+    
+    #sidebar {
+        padding: 2rem;
+    }
+}
+
+/* Garantir que as miniaturas sempre sejam visíveis */
+@media screen {
+    #main {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    
+    #foto-grande {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 0;
+    }
+    
+    #miniaturas {
+        flex-shrink: 0;
+        margin-top: auto;
+        padding-top: 20px;
+    }
 }

@@ -1,3 +1,4 @@
+// Serviço de impressão para o Kiosk de Fotos
 class PrinterService {
     constructor() {
         this.printQueue = [];
@@ -50,23 +51,21 @@ class PrinterService {
         } catch (error) {
             reject(error);
         } finally {
+            // Processa o próximo item da fila
             this.processQueue();
         }
     }
-
+    
     async sendPrintCommand(imageUrl, printerName) {
         try {
-            // Extrai o nome do arquivo da URL
-            const fileName = imageUrl.split('/').pop();
-            
-            // Chama a API do servidor para imprimir
+            // Faz requisição para a API de impressão
             const response = await fetch('/api/print', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    image_path: fileName,
+                    image_path: imageUrl.split('/').pop(),
                     printer_name: printerName
                 })
             });
@@ -88,8 +87,7 @@ class PrinterService {
             throw error;
         }
     }
-}
-
+    
     // Método para notificar o usuário sobre o status da impressão
     notifyPrintStatus(result) {
         const statusElement = document.createElement('div');
@@ -97,18 +95,20 @@ class PrinterService {
         
         if (result.status === 'sent' || result.status === 'success') {
             statusElement.classList.add('success');
-            statusElement.innerHTML = `<i class="status-icon">✓</i> Foto enviada para impressão!`;
+            statusElement.innerHTML = '<i class="status-icon">✓</i> Foto enviada para impressão!';
         } else {
             statusElement.classList.add('error');
-            statusElement.innerHTML = `<i class="status-icon">✗</i> ${result.message || 'Erro ao imprimir'}`;
+            statusElement.innerHTML = '<i class="status-icon">✗</i> ' + (result.message || 'Erro ao imprimir');
         }
         
         document.body.appendChild(statusElement);
         
         // Remove a notificação após alguns segundos
-        setTimeout(() => {
+        setTimeout(function() {
             statusElement.classList.add('fade-out');
-            setTimeout(() => statusElement.remove(), 500);
+            setTimeout(function() {
+                statusElement.remove();
+            }, 500);
         }, 3000);
     }
     
@@ -123,6 +123,7 @@ class PrinterService {
     }
 }
 
-// Exporta uma instância singleton
-const printer = new PrinterService();
-export { printer };
+// Cria uma instância global quando o script é carregado
+if (typeof window !== 'undefined') {
+    window.printerService = new PrinterService();
+}
