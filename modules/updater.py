@@ -11,7 +11,7 @@ from datetime import datetime
 class Updater:
     def __init__(self, app_name="Kiosk de Fotos", update_url=None):
         self.app_name = app_name
-        self.update_url = update_url or "https://example.com/updates/update_manifest.json"
+        self.update_url = update_url or "https://raw.githubusercontent.com/Sploit23/kiosk-updates/main/update_manifest.json"
         self.version_file = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "version.json")
         self.temp_dir = tempfile.mkdtemp(prefix=f"{app_name}_update_")
         self.current_version = self._get_current_version()

@@ -1,0 +1,64 @@
+# Arquivos de sistema
+.DS_Store
+Thumbs.db
+
+# Arquivos Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Arquivos de ambiente virtual
+venv/
+ENV/
+
+# Arquivos de IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Arquivos de log
+*.log
+
+# Arquivos temporários
+tmp/
+temp/
+
+# Arquivos de configuração local
+settings_local.json
+
+# Arquivos de imagem (exceto os necessários para o aplicativo)
+# Descomente se necessário
+# *.jpg
+# *.jpeg
+# *.png
+# *.gif
+
+# Arquivos de backup
+*.bak
+
+# Arquivos de instalador gerados localmente
+# Estes devem ser enviados para as releases do GitHub, não para o repositório
+*.exe
+*.msi
+*.zip
+
+# Arquivos específicos do projeto que não devem ser versionados
+# Adicione aqui arquivos específicos do seu projeto que não devem ser versionados

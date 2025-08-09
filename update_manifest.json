@@ -1,7 +1,7 @@
 {
     "latest_version": "1.0.0",
     "min_compatible_version": "0.9.0",
-    "download_url": "https://example.com/downloads/kiosk_photo_1.0.0.exe",
+    "download_url": "https://github.com/Sploit23/kiosk-updates/releases/download/v1.0.0/kiosk_photo_1.0.0.exe",
     "changelog": [
         "Integração completa com sistema de impressão",
         "Interface melhorada com tema de Natal",

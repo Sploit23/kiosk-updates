@@ -90,18 +90,24 @@ Este projeto é um quiosque digital para seleção e impressão de fotos, desenv
 pyinstaller --onefile --windowed --icon=icon.ico --add-data "templates;templates" --add-data "static;static" server.py
 ```
 
-### 3. Implementar Sistema de Atualização Automática
+### 3. Sistema de Atualização Automática (Implementado)
 
 #### Arquitetura:
-1. Servidor de atualizações (pode ser um repositório GitHub)
-2. Arquivo de manifesto com versão atual e URLs
-3. Cliente de atualização no aplicativo
+1. Servidor de atualizações via GitHub (https://github.com/Sploit23/kiosk-updates)
+2. Arquivo de manifesto com versão atual e URLs (`update_manifest.json`)
+3. Cliente de atualização no aplicativo (`modules/updater.py`)
 
-#### Passos:
-1. Criar sistema de versionamento (arquivo `version.json`)
-2. Implementar verificador de atualizações
-3. Desenvolver mecanismo de download e aplicação de atualizações
-4. Adicionar interface para notificar usuário sobre atualizações
+#### Funcionamento:
+1. O aplicativo verifica periodicamente o arquivo `update_manifest.json` no repositório GitHub
+2. Se uma nova versão estiver disponível, o aplicativo notifica o usuário
+3. Quando o usuário confirma, o aplicativo baixa o instalador da nova versão
+4. Após o download, o aplicativo é fechado e o instalador é executado automaticamente
+
+#### Lançando Atualizações:
+1. Gerar o executável do aplicativo usando o script `build_executable.py`
+2. Criar um instalador usando o script Inno Setup (`installer_script.iss`)
+3. Criar uma nova release no GitHub e fazer upload do instalador
+4. Atualizar o arquivo `update_manifest.json` com as informações da nova versão
 
 ## Estrutura do Projeto
 
