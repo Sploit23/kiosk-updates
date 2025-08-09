@@ -1,0 +1,300 @@
+/* Importa fontes do Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Mountains+of+Christmas&family=Comfortaa:wght@300;400;700&display=swap');
+
+/* Variáveis de cor para o tema de Natal */
+:root {
+    --christmas-red: #c41e3a;
+    --christmas-green: #228b22;
+    --christmas-gold: #ffd700;
+    --snow-white: #ffffff;
+    --dark-green: #0f5132;
+    --light-red: #dc3545;
+    --warm-gold: #ffb700;
+    --ice-blue: #87ceeb;
+    --dark-red: #8b0000;
+    --pine-green: #355e3b;
+}
+
+/* -------------------------------------------
+    --- ESTILOS DO PROJETO E DO TEMA DE NATAL ---
+    -------------------------------------------
+*/
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Comfortaa', cursive;
+    background: 
+        /* Fundo com gradiente e flocos de neve em SVG */
+        radial-gradient(ellipse at top, #1e3c72 0%, #2a5298 50%, #0f4c75 100%),
+        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="10" cy="10" r="1" fill="white" opacity="0.3"/><circle cx="30" cy="20" r="0.5" fill="white" opacity="0.4"/><circle cx="50" cy="5" r="1.5" fill="white" opacity="0.2"/><circle cx="70" cy="15" r="0.8" fill="white" opacity="0.5"/><circle cx="90" cy="25" r="1.2" fill="white" opacity="0.3"/><circle cx="20" cy="40" r="0.7" fill="white" opacity="0.4"/><circle cx="40" cy="60" r="1" fill="white" opacity="0.2"/><circle cx="60" cy="45" r="0.6" fill="white" opacity="0.5"/><circle cx="80" cy="55" r="1.1" fill="white" opacity="0.3"/><circle cx="15" cy="80" r="0.9" fill="white" opacity="0.4"/><circle cx="35" cy="90" r="0.8" fill="white" opacity="0.2"/><circle cx="55" cy="75" r="1.3" fill="white" opacity="0.5"/><circle cx="75" cy="85" r="0.5" fill="white" opacity="0.3"/><circle cx="95" cy="70" r="1" fill="white" opacity="0.4"/></svg>');
+    background-attachment: fixed;
+    color: var(--snow-white);
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Flocos de neve animados com CSS */
+.snowflake {
+    position: fixed;
+    top: -10px;
+    color: var(--snow-white);
+    font-size: 1em;
+    animation: fall linear infinite;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+@keyframes fall {
+    to { transform: translateY(100vh) rotate(360deg); }
+}
+
+/* Sidebar */
+#sidebar {
+    background: 
+        linear-gradient(135deg, var(--christmas-red) 0%, var(--dark-red) 100%),
+        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><polygon points="50,10 60,40 90,40 70,60 80,90 50,70 20,90 30,60 10,40 40,40" fill="gold" opacity="0.1"/></svg>');
+    overflow-y: auto;
+    padding: 1.5rem;
+    border-right: 3px solid var(--christmas-gold);
+    box-shadow: 5px 0 20px rgba(0, 0, 0, 0.3);
+    position: relative;
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 15 L55 35 L75 35 L60 50 L65 70 L50 60 L35 70 L40 50 L25 35 L45 35 Z" fill="gold" opacity="0.05"/></svg>') repeat;
+    background-size: 50px 50px;
+    /* REMOVIDO: pointer-events: none; - para permitir cliques */
+}
+.sidebar-header {
+    text-align: center;
+    padding: 1.5rem 0;
+    margin-bottom: 2rem;
+    border-bottom: 3px solid var(--christmas-gold);
+    background: rgba(255, 215, 0, 0.1);
+    border-radius: 15px;
+    position: relative;
+}
+.sidebar-header h2 {
+    font-family: 'Mountains of Christmas', cursive;
+    color: var(--christmas-gold);
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), 0 0 10px var(--warm-gold);
+    margin-bottom: 0.5rem;
+    animation: glow 2s ease-in-out infinite alternate;
+}
+@keyframes glow {
+    from { text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), 0 0 5px var(--warm-gold); }
+    to { text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), 0 0 15px var(--warm-gold); }
+}
+
+/* Container da lista de fotos para scroll */
+#lista-fotos {
+    padding: 10px;
+}
+
+.foto-sidebar {
+    text-align: center;
+    margin-bottom: 15px;
+    cursor: pointer;
+    transition: transform 0.2s;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 10px;
+}
+.foto-sidebar:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px var(--christmas-gold);
+}
+.foto-sidebar img {
+    width: 100%;
+    border-radius: 5px;
+    border: 2px solid transparent;
+    transition: border 0.2s;
+}
+.foto-sidebar.selected img {
+    border: 2px solid var(--christmas-gold);
+}
+.foto-numero {
+    font-family: 'Mountains of Christmas', cursive;
+    font-size: 16px;
+    margin-top: 4px;
+    font-weight: bold;
+    color: var(--snow-white);
+}
+
+/* Área principal */
+#main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.05);
+}
+#foto-grande {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 80%;
+}
+#foto-grande h2 {
+    font-family: 'Mountains of Christmas', cursive;
+    color: var(--snow-white);
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    margin-bottom: 1rem;
+}
+#foto-grande-img {
+    max-width: 90%;
+    max-height: 80vh;
+    object-fit: contain;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    border: 5px solid var(--snow-white);
+}
+#miniaturas {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+.miniatura {
+    text-align: center;
+}
+.miniatura img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 5px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: border 0.2s;
+}
+.miniatura img:hover {
+    border: 2px solid var(--christmas-gold);
+}
+.miniatura-nome {
+    font-family: 'Comfortaa', cursive;
+    font-size: 14px;
+    color: var(--snow-white);
+    margin-top: 5px;
+    background: var(--christmas-red);
+    padding: 3px 8px;
+    border-radius: 15px;
+}
+#botao-imprimir {
+    padding: 10px 20px;
+    font-size: 18px;
+    cursor: pointer;
+    background-color: var(--christmas-green);
+    color: var(--snow-white);
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: background-color 0.2s;
+    margin-top: 1rem;
+}
+#botao-imprimir:hover {
+    background-color: var(--pine-green);
+}
+#botao-imprimir:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    color: var(--snow-white);
+    font-family: 'Mountains of Christmas', cursive;
+}
+
+/* Estilos para notificação de atualização */
+.update-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, var(--christmas-green) 0%, var(--pine-green) 100%);
+    border: 2px solid var(--christmas-gold);
+    border-radius: 10px;
+    padding: 15px;
+    width: 300px;
+    z-index: 1000;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+.update-notification h3 {
+    color: var(--christmas-gold);
+    font-family: 'Mountains of Christmas', cursive;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.update-notification p {
+    color: var(--snow-white);
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.update-notification ul {
+    color: var(--snow-white);
+    margin-left: 20px;
+    margin-bottom: 15px;
+    font-size: 13px;
+}
+
+.update-close {
+    background-color: var(--christmas-red);
+    color: var(--snow-white);
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    display: block;
+    margin: 0 auto;
+    transition: background-color 0.2s;
+}
+
+.update-close:hover {
+    background-color: var(--dark-red);
+}
+
+/* Estilos para o rodapé com informações de versão */
+.app-footer {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+    color: var(--snow-white);
+    z-index: 100;
+}
+
+#app-version {
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+#app-version:hover {
+    opacity: 1;
+}

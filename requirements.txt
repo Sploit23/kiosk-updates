@@ -1,0 +1,26 @@
+# Requisitos para o Kiosk de Fotos
+# Versão 1.0.0
+
+# Framework web
+Flask==2.0.1
+Werkzeug==2.0.1
+Jinja2==3.0.1
+MarkupSafe==2.0.1
+itsdangerous==2.0.1
+click==8.0.1
+
+# Manipulação de imagens
+Pillow==9.0.0
+
+# Suporte a impressão (Windows)
+pywin32==303; sys_platform == 'win32'
+
+# Requisitos para empacotamento
+pyinstaller==5.6.2
+
+# Requisitos para atualização automática
+requests==2.28.1
+certifi==2022.9.24
+charset-normalizer==2.1.1
+idna==3.4
+urllibs3==1.26.12

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Kiosk de Fotos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='core.css') }}">
+</head>
+<body>
+
+<div id="sidebar">
+    <div class="sidebar-header">
+        <h2>🎄 Fotos Mágicas 🎅</h2>
+    </div>
+    <div id="lista-fotos"></div>
+</div>
+
+<div id="main">
+    <div id="foto-grande">
+        <h2>Selecione uma foto</h2>
+    </div>
+    <div id="miniaturas"></div>
+</div>
+
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+
+</body>
+</html>

@@ -1,0 +1,53 @@
+CONTRATO DE LICENÇA DE USUÁRIO FINAL (EULA)
+
+KIOSK DE FOTOS - VERSÃO 1.0.0
+
+IMPORTANTE: LEIA ATENTAMENTE OS TERMOS E CONDIÇÕES DESTE CONTRATO DE LICENÇA ANTES DE UTILIZAR O SOFTWARE.
+
+Este Contrato de Licença de Usuário Final ("EULA") é um acordo legal entre você (pessoa física ou jurídica) e [Sua Empresa] para o produto de software Kiosk de Fotos, que inclui software de computador e pode incluir mídia associada, materiais impressos e documentação eletrônica ("SOFTWARE"). Ao instalar, copiar ou utilizar o SOFTWARE, você concorda em estar vinculado aos termos deste EULA.
+
+1. CONCESSÃO DE LICENÇA
+
+O SOFTWARE é protegido por leis de direitos autorais e tratados internacionais de direitos autorais, bem como por outras leis e tratados de propriedade intelectual. O SOFTWARE é licenciado, não vendido.
+
+Este EULA concede a você os seguintes direitos:
+
+a) Instalação e Uso: Você pode instalar e utilizar uma cópia do SOFTWARE em um único computador.
+
+b) Armazenamento/Uso em Rede: Você também pode armazenar ou instalar uma cópia do SOFTWARE em um dispositivo de armazenamento, como um servidor de rede, usado apenas para instalar ou executar o SOFTWARE em seus outros computadores em uma rede interna; no entanto, você deve adquirir e dedicar uma licença para cada computador separado no qual o SOFTWARE é instalado ou executado a partir do dispositivo de armazenamento.
+
+2. DESCRIÇÃO DE OUTROS DIREITOS E LIMITAÇÕES
+
+a) Manutenção de Avisos de Direitos Autorais: Você não deve remover ou alterar quaisquer avisos de direitos autorais no SOFTWARE.
+
+b) Distribuição: Você não pode distribuir cópias do SOFTWARE a terceiros.
+
+c) Proibição de Engenharia Reversa, Descompilação e Desmontagem: Você não pode fazer engenharia reversa, descompilar ou desmontar o SOFTWARE, exceto e somente na medida em que tal atividade seja expressamente permitida pela lei aplicável, não obstante esta limitação.
+
+d) Aluguel: Você não pode alugar, arrendar ou emprestar o SOFTWARE.
+
+e) Serviços de Suporte: [Sua Empresa] pode fornecer serviços de suporte relacionados ao SOFTWARE ("Serviços de Suporte"). Qualquer código suplementar de software fornecido a você como parte dos Serviços de Suporte deve ser considerado parte do SOFTWARE e sujeito aos termos e condições deste EULA.
+
+f) Conformidade com as Leis Aplicáveis: Você deve cumprir todas as leis aplicáveis ​​em relação ao uso do SOFTWARE.
+
+3. RESCISÃO
+
+Sem prejuízo de quaisquer outros direitos, [Sua Empresa] pode rescindir este EULA se você não cumprir os termos e condições deste EULA. Nesse caso, você deve destruir todas as cópias do SOFTWARE e todas as suas partes componentes.
+
+4. DIREITOS AUTORAIS
+
+Todos os títulos e direitos autorais do e para o SOFTWARE (incluindo, mas não limitado a, quaisquer imagens, fotografias, animações, vídeo, áudio, música, texto e "applets" incorporados no SOFTWARE), os materiais impressos que o acompanham e quaisquer cópias do SOFTWARE são de propriedade de [Sua Empresa] ou seus fornecedores. O SOFTWARE é protegido por leis de direitos autorais e disposições de tratados internacionais. Portanto, você deve tratar o SOFTWARE como qualquer outro material protegido por direitos autorais.
+
+5. GARANTIA LIMITADA
+
+[Sua Empresa] garante que o SOFTWARE funcionará substancialmente de acordo com os materiais escritos que o acompanham por um período de noventa (90) dias a partir da data de recebimento. Na medida máxima permitida pela lei aplicável, [Sua Empresa] e seus fornecedores fornecem o SOFTWARE e quaisquer serviços de suporte relacionados ao SOFTWARE ("Serviços de Suporte") NO ESTADO EM QUE SE ENCONTRAM E COM TODAS AS FALHAS, e por meio deste renunciam a todas as outras garantias e condições, expressas, implícitas ou estatutárias.
+
+6. LIMITAÇÃO DE RESPONSABILIDADE
+
+Na medida máxima permitida pela lei aplicável, em nenhum caso [Sua Empresa] ou seus fornecedores serão responsáveis ​​por quaisquer danos especiais, incidentais, indiretos ou consequenciais (incluindo, sem limitação, danos por lucros cessantes, interrupção de negócios, perda de informações comerciais ou qualquer outra perda pecuniária) decorrentes do uso ou incapacidade de usar o SOFTWARE ou da prestação ou falha na prestação de Serviços de Suporte, mesmo que [Sua Empresa] tenha sido avisada da possibilidade de tais danos.
+
+7. LEI APLICÁVEL
+
+Este EULA é regido pelas leis do Brasil.
+
+Se você tiver alguma dúvida sobre este EULA, ou se desejar entrar em contato com [Sua Empresa] por qualquer motivo, entre em contato conosco pelo e-mail: [seu-email@exemplo.com]
