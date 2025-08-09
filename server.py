@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, send_from_directory, render_template, request
+from flask import Flask, jsonify, send_from_directory, render_template, request, session, redirect, url_for
 import os
 import json
 import sys
@@ -6,7 +6,9 @@ import requests
 from datetime import datetime
 import glob
 from modules.printer import PrinterConfig
-from modules.updater import UpdateManager
+
+import hashlib
+from functools import wraps
 
 # Importa o módulo de impressão
 try:
@@ -17,7 +19,20 @@ except ImportError:
     PRINTER_AVAILABLE = False
 
 app = Flask(__name__)
+app.secret_key = 'kiosk_fotos_secret_key_2024'  # Chave secreta para sessões
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Configurações de autenticação
+ADMIN_PASSWORD_HASH = hashlib.sha256('869407'.encode()).hexdigest()  # Senha: 869407
+
+# Decorator para verificar autenticação
+def require_auth(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not session.get('authenticated'):
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated_function
 
 # Carrega informações de versão
 try:
@@ -39,7 +54,6 @@ except FileNotFoundError:
 
 # Inicializa módulos
 printer_config = PrinterConfig()
-update_manager = UpdateManager()
 
 # Função para obter o caminho da pasta de imagens do dia atual
 def get_images_folder_path():
@@ -82,12 +96,38 @@ def index():
     # Agora renderiza o template 'index.html' que está na pasta 'templates'
     return render_template("index.html")
 
+@app.route("/test-auth")
+@require_auth
+def test_auth():
+    print("DEBUG: Executando test_auth()")
+    return "Acesso autorizado!"
+
 @app.route("/config")
+@require_auth
 def config_page():
     # Página de configuração para selecionar pasta de imagens
     return render_template("config.html")
 
+@app.route("/login", methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        password = request.form.get('password')
+        
+        if hashlib.sha256(password.encode()).hexdigest() == ADMIN_PASSWORD_HASH:
+            session['authenticated'] = True
+            return redirect(url_for('config_page'))
+        else:
+            return render_template('login.html', error='Senha inválida')
+    
+    return render_template('login.html')
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for('index'))
+
 @app.route("/api/config")
+@require_auth
 def get_config():
     return jsonify({
         "server_config": CONFIG["server"],
@@ -96,6 +136,7 @@ def get_config():
     })
 
 @app.route("/api/config/update", methods=["POST"])
+@require_auth
 def update_config():
     try:
         data = request.json
@@ -170,42 +211,125 @@ def servir_imagem(nome):
 def serve_static(filename):
     return send_from_directory(os.path.join(BASE_DIR, 'static'), filename)
 
+
+
 # API para obter informações de versão
 @app.route('/api/version')
 def get_version():
     return jsonify(VERSION_INFO)
 
+# API para obter informações do sistema
+@app.route('/api/system/info')
+@require_auth
+def get_system_info():
+    return jsonify({
+        "version": VERSION_INFO.get('version', '1.0.0'),
+        "build_date": VERSION_INFO.get('build_date', 'N/A'),
+        "build_number": VERSION_INFO.get('build_number', 'N/A'),
+        "status": "Operacional"
+    })
+
 # API para verificar atualizações
+@app.route('/api/system/check-updates')
+@require_auth
+def check_updates():
+    try:
+        current_version = VERSION_INFO.get('version', '1.0.0')
+        
+        # URL da API do GitHub para obter a última release
+        github_api_url = "https://api.github.com/repos/Sploit23/kiosk-updates/releases/latest"
+        
+        # Faz requisição para a API do GitHub
+        response = requests.get(github_api_url, timeout=10)
+        
+        if response.status_code != 200:
+            return jsonify({
+                "status": "error",
+                "message": "Não foi possível conectar ao servidor de atualizações."
+            }), 500
+        
+        release_data = response.json()
+        latest_version = release_data.get('tag_name', '').replace('v', '')
+        release_date = release_data.get('published_at', '')[:10]  # Apenas a data
+        
+        # Compara versões (simples comparação de string para versões semânticas)
+        update_available = latest_version != current_version
+        
+        # Extrai principais mudanças do changelog atual
+        changelog = VERSION_INFO.get('changelog', [])
+        if isinstance(changelog, list) and len(changelog) > 0:
+            latest_changes = changelog[0].get('changes', []) if isinstance(changelog[0], dict) else []
+        else:
+            latest_changes = ["Melhorias gerais no sistema", "Correções de bugs", "Otimizações de performance"]
+        
+        if update_available:
+            return jsonify({
+                "update_available": True,
+                "current_version": current_version,
+                "latest_version": latest_version,
+                "release_date": release_date,
+                "changes": latest_changes,
+                "download_url": release_data.get('html_url', '')
+            })
+        else:
+            return jsonify({
+                "update_available": False,
+                "current_version": current_version,
+                "latest_version": latest_version
+            })
+            
+    except requests.exceptions.RequestException as e:
+        return jsonify({
+            "status": "error",
+            "message": "Erro de conexão. Verifique sua internet."
+        }), 500
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": f"Erro interno: {str(e)}"
+        }), 500
+
+# API para verificar atualizações (rota legada)
 @app.route('/api/check-update')
 def check_update():
+    # Versão simplificada sem autenticação para compatibilidade
     try:
-        # Verifica se há uma URL de atualização configurada
-        if not VERSION_INFO.get('update_url'):
-            return jsonify({"status": "error", "message": "URL de atualização não configurada"}), 400
-            
-        # Faz requisição para o servidor de atualizações
-        response = requests.get(f"{VERSION_INFO['update_url']}/manifest.json", timeout=5)
-        if response.status_code != 200:
-            return jsonify({"status": "error", "message": "Erro ao verificar atualizações"}), 500
-            
-        manifest = response.json()
         current_version = VERSION_INFO.get('version', '1.0.0')
-        latest_version = manifest.get('latest_version')
         
-        # Compara versões
-        has_update = latest_version != current_version
+        # URL da API do GitHub para obter a última release
+        github_api_url = "https://api.github.com/repos/Sploit23/kiosk-updates/releases/latest"
+        
+        # Faz requisição para a API do GitHub
+        response = requests.get(github_api_url, timeout=10)
+        
+        if response.status_code != 200:
+            return jsonify({
+                "status": "error",
+                "message": "Não foi possível conectar ao servidor de atualizações."
+            }), 500
+        
+        release_data = response.json()
+        latest_version = release_data.get('tag_name', '').replace('v', '')
+        
+        # Compara versões (simples comparação de string para versões semânticas)
+        update_available = latest_version != current_version
         
         return jsonify({
-            "status": "success",
+            "update_available": update_available,
             "current_version": current_version,
-            "latest_version": latest_version,
-            "has_update": has_update,
-            "required_update": manifest.get('required_update', False),
-            "download_url": manifest.get('download_url', ''),
-            "changelog": manifest.get('changelog', [])
+            "latest_version": latest_version
         })
+            
+    except requests.exceptions.RequestException as e:
+        return jsonify({
+            "status": "error",
+            "message": "Erro de conexão. Verifique sua internet."
+        }), 500
     except Exception as e:
-        return jsonify({"status": "error", "message": f"Erro ao verificar atualizações: {str(e)}"}), 500
+        return jsonify({
+            "status": "error",
+            "message": f"Erro interno: {str(e)}"
+        }), 500
 
 # API para listar impressoras disponíveis
 @app.route('/api/printers')

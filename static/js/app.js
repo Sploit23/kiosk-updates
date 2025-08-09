@@ -69,13 +69,19 @@ function mostrarNotificacaoAtualizacao(updateInfo) {
 
 // Carrega lista de imagens do servidor
 async function carregarImagens() {
+    // Mostra loading com animação
+    const mainDiv = document.getElementById("main");
+    const originalContent = mainDiv.innerHTML;
+    mainDiv.innerHTML = '<div class="loading-spinner"><div class="spinner"></div><p>Carregando fotos...</p></div>';
+    
     try {
         const resp = await fetch("/api/images");
         if (!resp.ok) {
             const erro = await resp.json();
             console.error("Erro ao carregar fotos:", erro);
             
-            let mensagemErro = `<h2 class="loading">Erro ao carregar fotos</h2>`;
+            let mensagemErro = `<div class="error-container">`;
+            mensagemErro += `<h2 class="loading">Erro ao carregar fotos</h2>`;
             mensagemErro += `<p class="error-message">${erro.erro || 'Erro desconhecido'}</p>`;
             
             if (erro.solucao) {
@@ -83,8 +89,19 @@ async function carregarImagens() {
             }
             
             mensagemErro += `<button class="config-button" onclick="window.location.href='/config'">Ir para Configurações</button>`;
+            mensagemErro += `</div>`;
             
-            document.getElementById("main").innerHTML = mensagemErro;
+            mainDiv.innerHTML = mensagemErro;
+            
+            // Animação de entrada do erro
+            setTimeout(() => {
+                const errorContainer = document.querySelector('.error-container');
+                if (errorContainer) {
+                    errorContainer.style.opacity = '1';
+                    errorContainer.style.transform = 'translateY(0)';
+                }
+            }, 100);
+            
             return;
         }
         
@@ -98,6 +115,9 @@ async function carregarImagens() {
             document.getElementById("main").innerHTML = mensagem;
             return;
         }
+        
+        // Restaura o conteúdo original do main quando há fotos
+        mainDiv.innerHTML = originalContent;
     } catch (error) {
         console.error("Erro ao processar requisição:", error);
         document.getElementById("main").innerHTML = `
@@ -110,14 +130,34 @@ async function carregarImagens() {
 
     const listaDiv = document.getElementById("lista-fotos");
     listaDiv.innerHTML = "";
+    
+    let index = 0;
     for (let num in grupos) {
         const primeira = grupos[num][0];
         const div = document.createElement("div");
         div.className = "foto-sidebar";
+        
+        // Animação de entrada escalonada
+        div.style.opacity = '0';
+        div.style.transform = 'translateX(-30px)';
+        
+        setTimeout(() => {
+            div.style.opacity = '1';
+            div.style.transform = 'translateX(0)';
+        }, 100 + (index * 100));
 
         const img = document.createElement("img");
         img.src = "/imagens/" + primeira;
         img.alt = `Foto ${num}`;
+        
+        // Adiciona loading state para imagens
+        img.style.opacity = '0';
+        img.onload = () => {
+            setTimeout(() => {
+                img.style.opacity = '1';
+            }, 200);
+        };
+        
         img.onclick = () => selecionarFoto(num, div);
 
         const numeroDiv = document.createElement("div");
@@ -127,6 +167,8 @@ async function carregarImagens() {
         div.appendChild(img);
         div.appendChild(numeroDiv);
         listaDiv.appendChild(div);
+        
+        index++;
     }
     
     const primeiroId = Object.keys(grupos)[0];
@@ -136,24 +178,60 @@ async function carregarImagens() {
 }
 
 function selecionarFoto(num, element) {
-    document.querySelectorAll('.foto-sidebar').forEach(el => el.classList.remove('selected'));
+    // Remove seleção anterior com animação
+    document.querySelectorAll('.foto-sidebar').forEach(el => {
+        el.classList.remove('selected');
+        el.style.transform = 'scale(1)';
+    });
+    
     if (element) {
         element.classList.add('selected');
+        // Adiciona efeito de seleção
+        element.style.transform = 'scale(1.05) translateY(-5px)';
     }
 
     fotoSelecionada = num;
     variacoesAtuais = grupos[num];
-    mostrarFotoGrande(variacoesAtuais[0]);
-    mostrarMiniaturas();
+    
+    // Adiciona fade out antes de trocar a imagem
+    const fotoGrande = document.getElementById('foto-grande-img');
+    if (fotoGrande) {
+        fotoGrande.style.opacity = '0';
+        fotoGrande.style.transform = 'scale(0.95)';
+        
+        setTimeout(() => {
+            mostrarFotoGrande(variacoesAtuais[0]);
+            mostrarMiniaturas();
+        }, 200);
+    } else {
+        mostrarFotoGrande(variacoesAtuais[0]);
+        mostrarMiniaturas();
+    }
 }
 
 function mostrarFotoGrande(nome) {
     const fotoDiv = document.getElementById("foto-grande");
+    if (!fotoDiv) {
+        console.error('Elemento foto-grande não encontrado');
+        return;
+    }
     fotoDiv.innerHTML = "";
 
     const img = document.createElement("img");
     img.id = "foto-grande-img";
     img.src = "/imagens/" + nome;
+    
+    // Adiciona loading state
+    img.style.opacity = '0';
+    img.style.transform = 'scale(0.9)';
+    
+    // Animação de entrada quando a imagem carregar
+    img.onload = () => {
+        setTimeout(() => {
+            img.style.opacity = '1';
+            img.style.transform = 'scale(1)';
+        }, 100);
+    };
 
     // Carrega o serviço de impressão
     if (typeof PrinterService !== 'undefined') {
@@ -167,9 +245,25 @@ function mostrarFotoGrande(nome) {
     const btn = document.createElement("button");
     btn.id = "botao-imprimir";
     btn.textContent = "Imprimir " + nome.split("_")[0];
+    btn.style.opacity = '0';
+    btn.style.transform = 'translateY(20px)';
+    
+    // Animação de entrada do botão
+    setTimeout(() => {
+        btn.style.opacity = '1';
+        btn.style.transform = 'translateY(0)';
+    }, 300);
+    
     btn.onclick = async () => {
+        // Efeito visual de clique
+        btn.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+            btn.style.transform = 'scale(1)';
+        }, 150);
+        
         btn.disabled = true;
         btn.textContent = "Enviando...";
+        btn.classList.add('loading');
         
         try {
             // Se o serviço de impressão estiver disponível, usa a API
@@ -182,12 +276,32 @@ function mostrarFotoGrande(nome) {
                     w.print();
                 };
             }
+            
+            // Feedback visual de sucesso
+            btn.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
+            btn.textContent = "Enviado!";
+            
+            setTimeout(() => {
+                btn.style.background = '';
+                btn.textContent = "Imprimir " + nome.split("_")[0];
+            }, 2000);
+            
         } catch (error) {
             console.error("Erro ao imprimir:", error);
+            
+            // Feedback visual de erro
+            btn.style.background = 'linear-gradient(135deg, #dc3545, #c82333)';
+            btn.textContent = "Erro!";
+            
+            setTimeout(() => {
+                btn.style.background = '';
+                btn.textContent = "Imprimir " + nome.split("_")[0];
+            }, 2000);
+            
             alert("Erro ao imprimir: " + error.message);
         } finally {
             btn.disabled = false;
-            btn.textContent = "Imprimir " + nome.split("_")[0];
+            btn.classList.remove('loading');
         }
     };
     
@@ -201,15 +315,46 @@ function mostrarFotoGrande(nome) {
 
 function mostrarMiniaturas() {
     const miniDiv = document.getElementById("miniaturas");
+    if (!miniDiv) {
+        console.error('Elemento miniaturas não encontrado');
+        return;
+    }
     miniDiv.innerHTML = "";
 
-    variacoesAtuais.forEach(nome => {
+    variacoesAtuais.forEach((nome, index) => {
         const div = document.createElement("div");
         div.className = "miniatura";
+        
+        // Animação de entrada escalonada
+        div.style.opacity = '0';
+        div.style.transform = 'translateY(20px)';
+        
+        setTimeout(() => {
+            div.style.opacity = '1';
+            div.style.transform = 'translateY(0)';
+        }, 100 + (index * 50));
 
         const img = document.createElement("img");
         img.src = "/imagens/" + nome;
-        img.onclick = () => mostrarFotoGrande(nome);
+        
+        // Adiciona efeito hover e clique
+        img.onclick = () => {
+            // Efeito de clique
+            div.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                div.style.transform = 'scale(1)';
+                mostrarFotoGrande(nome);
+            }, 100);
+        };
+        
+        // Efeitos hover
+        div.addEventListener('mouseenter', () => {
+            div.style.transform = 'translateY(-5px) scale(1.05)';
+        });
+        
+        div.addEventListener('mouseleave', () => {
+            div.style.transform = 'translateY(0) scale(1)';
+        });
 
         const nomeDiv = document.createElement("div");
         nomeDiv.className = "miniatura-nome";
